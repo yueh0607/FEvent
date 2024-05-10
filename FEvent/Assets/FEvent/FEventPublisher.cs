@@ -16,7 +16,8 @@ namespace FEvent
             }
             m_EventContainer[type].Add(obj);
         }
-        public void AddEvent<T>(T obj) where T : IGenericEventBase
+
+        public void Subscribe<T>(T obj) where T : IGenericEventBase
             => InternalAddEvent(typeof(T), obj);
 
         internal void InternalRemoveEvent(Type type, object obj)
@@ -27,8 +28,9 @@ namespace FEvent
             }
         }
 
-        public void RemoveEvent<T>(T obj) where T : IGenericEventBase
+        public void UnSubscribe<T>(T obj) where T : IGenericEventBase
             => InternalRemoveEvent(typeof(T), obj);
+
 
         internal IReadOnlyList<object> InternalGetPublishableEvents(Type type)
         {
