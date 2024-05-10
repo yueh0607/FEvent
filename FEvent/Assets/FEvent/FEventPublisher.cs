@@ -6,13 +6,13 @@ namespace FEvent
 {
     public class FEventPublisher : IEventPublisher
     {
-        internal Dictionary<Type, List<object>> m_EventContainer = new Dictionary<Type, List<object>>();
+        internal Dictionary<Type, DynamicQueue<IEventListener>> m_EventContainer = new Dictionary<Type, DynamicQueue<IEventListener>>();
 
-        internal void InternalAddEvent(Type type, object obj)
+        internal void InternalAddEvent(Type type, IEventListener obj)
         {
             if (!m_EventContainer.ContainsKey(type))
             {
-                m_EventContainer[type] = new List<object>();
+                m_EventContainer[type] = new DynamicQueue<IEventListener>();
             }
             m_EventContainer[type].Add(obj);
         }
@@ -20,7 +20,7 @@ namespace FEvent
         public void Subscribe<T>(T obj) where T : IGenericEventBase
             => InternalAddEvent(typeof(T), obj);
 
-        internal void InternalRemoveEvent(Type type, object obj)
+        internal void InternalRemoveEvent(Type type, IEventListener obj)
         {
             if (m_EventContainer.ContainsKey(type))
             {
@@ -31,19 +31,12 @@ namespace FEvent
         public void UnSubscribe<T>(T obj) where T : IGenericEventBase
             => InternalRemoveEvent(typeof(T), obj);
 
-
-        internal IReadOnlyList<object> InternalGetPublishableEvents(Type type)
+        internal DynamicQueue<IEventListener> InternalGetPublishableEvents(Type type)
         {
-            if (m_EventContainer.ContainsKey(type))
-            {
-                return m_EventContainer[type];
-            }
-            return null;
+            return m_EventContainer.ContainsKey(type) ? m_EventContainer[type] : null;
         }
 
-        public IReadOnlyList<object> GetPublishableEvents<T>(Type type) where T : IGenericEventBase
+        public DynamicQueue<IEventListener> GetPublishableEvents<T>(Type type) where T : IGenericEventBase
             => InternalGetPublishableEvents(type);
-
-
     }
 }

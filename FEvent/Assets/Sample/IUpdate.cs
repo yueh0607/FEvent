@@ -1,6 +1,6 @@
 ﻿using FEvent;
 
-namespace FEvent.Smaple
+namespace FEvent.Sample
 {
     public interface IUpdate : ISendEvent
     {
