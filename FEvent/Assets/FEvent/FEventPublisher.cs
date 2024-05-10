@@ -16,7 +16,7 @@ namespace FEvent
             }
             m_EventContainer[type].Add(obj);
         }
-        internal void AddEvent<T>(T obj) where T : IGenericEventBase
+        public void AddEvent<T>(T obj) where T : IGenericEventBase
             => InternalAddEvent(typeof(T), obj);
 
         internal void InternalRemoveEvent(Type type, object obj)
@@ -27,10 +27,10 @@ namespace FEvent
             }
         }
 
-        internal void RemoveEvent<T>(T obj) where T : IGenericEventBase
+        public void RemoveEvent<T>(T obj) where T : IGenericEventBase
             => InternalRemoveEvent(typeof(T), obj);
 
-        internal List<object> InternalGetPublishableEvents(Type type)
+        internal IReadOnlyList<object> InternalGetPublishableEvents(Type type)
         {
             if (m_EventContainer.ContainsKey(type))
             {
@@ -39,7 +39,7 @@ namespace FEvent
             return null;
         }
 
-        internal List<object> GetPublishableEvents<T>(Type type) where T : IGenericEventBase
+        public IReadOnlyList<object> GetPublishableEvents<T>(Type type) where T : IGenericEventBase
             => InternalGetPublishableEvents(type);
 
 
