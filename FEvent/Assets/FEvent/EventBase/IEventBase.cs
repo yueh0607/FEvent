@@ -1,6 +1,6 @@
 ﻿namespace FEvent.Internal
 {
-    public interface IEventBase { }
+    public interface IEventBase : IEventListener { }
 
     public interface IGenericEventBase : IEventBase { }
 

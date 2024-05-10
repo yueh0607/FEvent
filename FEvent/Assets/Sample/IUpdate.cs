@@ -6,4 +6,7 @@ namespace FEvent.Smaple
     {
         void Update(float deltaTime);
     }
+
+
+    
 }
