@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+
+	<ItemGroup>
+		<Compile Include="..\FEvent\Assets\FEvent\**\*.cs">
+			<Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
+		</Compile>
+	</ItemGroup>
+</Project>
