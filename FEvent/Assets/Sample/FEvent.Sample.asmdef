@@ -1,0 +1,16 @@
+{
+    "name": "FEvent.Sample",
+    "rootNamespace": "FEvent.Sample",
+    "references": [
+        "GUID:604a93aaef04c3e43a7b98b2023e552c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
