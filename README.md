@@ -3,6 +3,7 @@
 
 # 单元测试
 编写了对点对点触发的测试，以及执行中移除/添加全局事件等测试逻辑
+
 ![image](https://github.com/yueh0607/FEvent/assets/102401735/a2ab81d1-b270-4e0e-8a11-4c87f11971b4)
 
 
