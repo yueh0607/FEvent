@@ -22,6 +22,7 @@ namespace FEvent
         private bool m_IsEnumerating = false;
         private int m_EnumCount = 0;
 
+        public int Count => m_Exist.Count;
 
         public void Add(T obj)
         {

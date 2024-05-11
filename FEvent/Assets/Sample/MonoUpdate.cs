@@ -6,43 +6,33 @@ using UnityEngine.Profiling;
 
 namespace FEvent.Sample
 {
-    class MyObject : IUpdate
+    class MyObject : IUpdate,IUpdate2
     {
         public void Update(float deltaTime)
         {
             Debug.Log($"Update : {deltaTime}");
         }
+
+        public void Update2(int deltaTime0, string a)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 
-    public class MonoUpdate : MonoBehaviour, IEnumerable<int>
+    public class MonoUpdate : MonoBehaviour
     {
 
-        IEnumerator<int> TestGC()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                yield return i;
-            }
-        }
 
+        MyObject obj = new MyObject();
         void Start()
         {
-            Profiler
-                .BeginSample("Test");
-            foreach (var k in this)
-            {
-                int x = k;
-            }
+            obj.Send(0);
 
-            Profiler.EndSample();
+            FEvent.Publisher.Subscribe<IUpdate>(obj);
+            FEvent.Publisher.SendAll<IUpdate>(0);
         }
 
-        public IEnumerator<int> GetEnumerator()
-        {
-            return TestGC();
-        }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
