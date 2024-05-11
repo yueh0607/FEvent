@@ -5,9 +5,9 @@ VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FEventSourceGenerator", "SourceGenerator\FEventSourceGenerator.csproj", "{CA527988-A0F7-4C2E-9309-BC2FEE81F704}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{F95EE3B4-8DB3-4F02-BE69-1584ACA4335F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTest.csproj", "{F95EE3B4-8DB3-4F02-BE69-1584ACA4335F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FEventLib", "FEventLib\FEventLib.csproj", "{C4F9AFF4-F91C-41ED-AE46-8B56509E0387}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FEventLib", "FEventLib\FEventLib.csproj", "{C4F9AFF4-F91C-41ED-AE46-8B56509E0387}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

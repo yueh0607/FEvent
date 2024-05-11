@@ -30,8 +30,9 @@ namespace FEvent
             {
                 m_WaitQueue.Enqueue((DynamicCommand.Add, obj));
             }
-            else
+            else if (!m_Exist.Contains(obj))
             {
+
                 m_InQueue.Enqueue(obj);
                 m_Exist.Add(obj);
             }
@@ -45,7 +46,7 @@ namespace FEvent
             }
             else
             {
-                m_Exist.Add(obj);
+                m_Exist.Remove(obj);
             }
         }
 
@@ -55,12 +56,16 @@ namespace FEvent
             m_IsEnumerating = true;
         }
 
-        
+
         public bool MoveNext(out T value)
         {
             if (m_EnumCount-- > 0)
             {
                 value = m_InQueue.Dequeue();
+                while (!m_Exist.Contains(value))
+                {
+                    value = m_InQueue.Dequeue();
+                }
                 return true;
             }
             value = default;
@@ -77,7 +82,7 @@ namespace FEvent
             while (m_WaitQueue.Count > 0)
             {
                 var cmd = m_WaitQueue.Dequeue();
-                if (cmd.Item1 == DynamicCommand.Add)
+                if (cmd.Item1 == DynamicCommand.Add && !m_Exist.Contains(cmd.Item2))
                 {
                     T value = cmd.Item2;
                     m_InQueue.Enqueue(value);
@@ -85,11 +90,7 @@ namespace FEvent
                 }
                 else
                 {
-                    T value = cmd.Item2;
-                    if (m_Exist.Contains(value))
-                    {
-                        m_Exist.Remove(value);
-                    }
+                    m_Exist.Remove(cmd.Item2);
                 }
             }
             m_IsEnumerating = false;
