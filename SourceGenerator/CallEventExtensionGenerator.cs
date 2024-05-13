@@ -119,7 +119,7 @@ public class CallEventExtensionGenerator : ISourceGenerator
         string resultName = $"_23result_99875265_1284622821";
         string publisherName = $"publisher_3_3_8184";
         string posName = $"___688_pos_5887_4531_2";
-
+        string convertObjName = $"_convertObj_3_3_8184";
 
         // Generate the extension method static class
         string extensionMethodClass = $@"
@@ -132,9 +132,11 @@ namespace FEvent
     public static class IMyCallPublishExtensions
     {{
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public static {returnType} Call(this {interfaceName} {objName}, {signature})
+        public static {returnType} Call(this object {objName}, {signature})
         {{
-            return {objName}.{methodName}({inputParameters});
+            if({objName} is {interfaceName} {convertObjName})
+                return {convertObjName}.{methodName}({inputParameters});
+            throw new global::System.InvalidCastException(""No such call event"");
         }}
 
         public static {returnType} Call<T>(this IEventPublisher {publisherName}, {signature}) where T : {interfaceName}
@@ -165,7 +167,7 @@ namespace FEvent
                 {listName}.StartEnum();
                 while ({listName}.MoveNext(out IEventListener {objName}))
                 {{
-                    {resultName}[{posName}++] = ((T){objName}).Call({inputParameters});
+                    {resultName}[{posName}++] = ((T){objName}).{methodName}({inputParameters});
                     {listName}.Return({objName});
                 }}
                 {listName}.EndEnum();

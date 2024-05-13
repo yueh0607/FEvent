@@ -169,7 +169,7 @@ public class SendEventExtensionGenerator : ISourceGenerator
         string listName = $"a1588_57_list_13845_812841";
         string objName = $"a_655__obj_333695__254";
         string publisherName = $"publisher_3_3_8184";
-
+        string convertObjName = $"convert_a_655__obj_333695__254";
         string extensionMethodClass = $@"
 using global::System;
 using {namespaceName};
@@ -179,9 +179,10 @@ namespace FEvent
     public static class {interfaceName}PublishExtensions
     {{
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public static void Send<T>(this T {objName} {signature}) where T : {interfaceName}
+        public static void Send<T>(this object {objName} {signature}) where T : {interfaceName}
         {{
-            {objName}.{methodName}({inputParameters});
+            if({objName} is {interfaceName} {convertObjName})
+                {convertObjName}.{methodName}({inputParameters});
         }}
 
         public static void SendAll<T>(this IEventPublisher {publisherName} {signature}) where T : {interfaceName}

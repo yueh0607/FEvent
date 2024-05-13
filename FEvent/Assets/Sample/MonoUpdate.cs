@@ -7,4 +7,15 @@ using UnityEngine.Profiling;
 namespace FEvent.Sample
 {
     //详见单元测试目录进行查看使用方式
+
+    public interface IUpdate : ISendEvent<int> { }
+
+    class A
+    {
+        void AA()
+        {
+            
+        }
+    }
+    
 }

@@ -14,8 +14,6 @@ namespace UnitTest
         {
             Console.WriteLine($"{a},{b}");
         }
-
-  
     }
 
 
@@ -27,7 +25,7 @@ namespace UnitTest
         public void TargetSendTest()
         {
             TestObject obj = new TestObject();
-            obj.Send(1, "2");
+            obj.Send<ITestSendEvent>(1, "2");
         }
 
         //广播测试
