@@ -40,14 +40,7 @@ namespace FEvent
 
         public void Remove(T obj)
         {
-            if (m_IsEnumerating)
-            {
-                m_WaitQueue.Enqueue((DynamicCommand.Remove, obj));
-            }
-            else
-            {
-                m_Exist.Remove(obj);
-            }
+            m_Exist.Remove(obj);
         }
 
         public void StartEnum()
@@ -87,10 +80,6 @@ namespace FEvent
                     T value = cmd.Item2;
                     m_InQueue.Enqueue(value);
                     m_Exist.Add(value);
-                }
-                else
-                {
-                    m_Exist.Remove(cmd.Item2);
                 }
             }
             m_IsEnumerating = false;
