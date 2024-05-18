@@ -6,15 +6,9 @@ namespace FEvent
 {
     public class DynamicQueue<T>
     {
-        private enum DynamicCommand
-        {
-            Add,
-            Remove,
-        }
-
         private Queue<T> m_InQueue = new Queue<T>();
 
-        private Queue<ValueTuple<DynamicCommand, T>> m_WaitQueue = new Queue<ValueTuple<DynamicCommand, T>>();
+        private Queue<T> m_WaitQueue = new Queue<T>();
 
         private HashSet<T> m_Exist = new HashSet<T>();
 
@@ -28,11 +22,10 @@ namespace FEvent
         {
             if (m_IsEnumerating)
             {
-                m_WaitQueue.Enqueue((DynamicCommand.Add, obj));
+                m_WaitQueue.Enqueue(obj);
             }
             else if (!m_Exist.Contains(obj))
             {
-
                 m_InQueue.Enqueue(obj);
                 m_Exist.Add(obj);
             }
@@ -74,12 +67,11 @@ namespace FEvent
         {
             while (m_WaitQueue.Count > 0)
             {
-                var cmd = m_WaitQueue.Dequeue();
-                if (cmd.Item1 == DynamicCommand.Add && !m_Exist.Contains(cmd.Item2))
+                var wait_Value = m_WaitQueue.Dequeue();
+                if (!m_Exist.Contains(wait_Value))
                 {
-                    T value = cmd.Item2;
-                    m_InQueue.Enqueue(value);
-                    m_Exist.Add(value);
+                    m_InQueue.Enqueue(wait_Value);
+                    m_Exist.Add(wait_Value);
                 }
             }
             m_IsEnumerating = false;
