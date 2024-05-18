@@ -1,17 +1,24 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace FEvent
 {
-    public class DynamicQueue<T>
+
+    public class DynamicQueue<T> where T : class
     {
+        private enum DynamicCommand
+        {
+            Add,
+            Remove,
+        }
+
         private Queue<T> m_InQueue = new Queue<T>();
 
-        private Queue<T> m_WaitQueue = new Queue<T>();
+        private Queue<ValueTuple<DynamicCommand, T>> m_WaitQueue = new Queue<ValueTuple<DynamicCommand, T>>();
 
         private HashSet<T> m_Exist = new HashSet<T>();
 
+        private HashSet<T> m_Enumerated = new HashSet<T>();
 
         private bool m_IsEnumerating = false;
         private int m_EnumCount = 0;
@@ -22,7 +29,7 @@ namespace FEvent
         {
             if (m_IsEnumerating)
             {
-                m_WaitQueue.Enqueue(obj);
+                m_WaitQueue.Enqueue((DynamicCommand.Add, obj));
             }
             else if (!m_Exist.Contains(obj))
             {
@@ -33,7 +40,20 @@ namespace FEvent
 
         public void Remove(T obj)
         {
-            m_Exist.Remove(obj);
+            if (m_IsEnumerating)
+            {
+                //没遍历过、但是还存在
+                if(!m_Enumerated.Contains(obj) && m_Exist.Remove(obj))
+                {
+                    m_EnumCount--;
+                }
+                else
+                    m_WaitQueue.Enqueue((DynamicCommand.Remove, obj));
+            }
+            else
+            {
+                m_Exist.Remove(obj);
+            }
         }
 
         public void StartEnum()
@@ -52,6 +72,7 @@ namespace FEvent
                 {
                     value = m_InQueue.Dequeue();
                 }
+                m_Enumerated.Add(value);
                 return true;
             }
             value = default;
@@ -67,14 +88,21 @@ namespace FEvent
         {
             while (m_WaitQueue.Count > 0)
             {
-                var wait_Value = m_WaitQueue.Dequeue();
-                if (!m_Exist.Contains(wait_Value))
+                var cmd = m_WaitQueue.Dequeue();
+                if (cmd.Item1 == DynamicCommand.Add && !m_Exist.Contains(cmd.Item2))
                 {
-                    m_InQueue.Enqueue(wait_Value);
-                    m_Exist.Add(wait_Value);
+                    T value = cmd.Item2;
+                    m_InQueue.Enqueue(value);
+                    m_Exist.Add(value);
+                }
+                else
+                {
+                    m_Exist.Remove(cmd.Item2);
                 }
             }
+            m_Enumerated.Clear();
             m_IsEnumerating = false;
         }
     }
 }
+
