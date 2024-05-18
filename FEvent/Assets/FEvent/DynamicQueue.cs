@@ -31,10 +31,9 @@ namespace FEvent
             {
                 m_WaitQueue.Enqueue((DynamicCommand.Add, obj));
             }
-            else if (!m_Exist.Contains(obj))
+            else if (m_Exist.Add(obj))
             {
                 m_InQueue.Enqueue(obj);
-                m_Exist.Add(obj);
             }
         }
 
@@ -42,8 +41,7 @@ namespace FEvent
         {
             if (m_IsEnumerating)
             {
-                //没遍历过、但是还存在
-                if(!m_Enumerated.Contains(obj) && m_Exist.Remove(obj))
+                if (!m_Enumerated.Contains(obj) && m_Exist.Remove(obj))
                 {
                     m_EnumCount--;
                 }
@@ -62,17 +60,15 @@ namespace FEvent
             m_IsEnumerating = true;
         }
 
-
         public bool MoveNext(out T value)
         {
             if (m_EnumCount-- > 0)
             {
                 value = m_InQueue.Dequeue();
-                while (!m_Exist.Contains(value))
+                while (!m_Exist.Contains(value) || !m_Enumerated.Add(value))
                 {
                     value = m_InQueue.Dequeue();
                 }
-                m_Enumerated.Add(value);
                 return true;
             }
             value = default;
@@ -89,11 +85,9 @@ namespace FEvent
             while (m_WaitQueue.Count > 0)
             {
                 var cmd = m_WaitQueue.Dequeue();
-                if (cmd.Item1 == DynamicCommand.Add && !m_Exist.Contains(cmd.Item2))
+                if (cmd.Item1 == DynamicCommand.Add && m_Exist.Add(cmd.Item2))
                 {
-                    T value = cmd.Item2;
-                    m_InQueue.Enqueue(value);
-                    m_Exist.Add(value);
+                    m_InQueue.Enqueue(cmd.Item2);
                 }
                 else
                 {

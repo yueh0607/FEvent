@@ -70,6 +70,12 @@ namespace UnitTest
             //在本次发布时应用上次结果
             FEvents.Publisher.SendAll<IComplexSendEvent>();
 
+            string remain2 = string.Join(',', ComplexObject.list.Select(x => x.id));
+            Console.WriteLine($"\n广播执行完毕  剩余事件:{remain2}\n ");
+
+            //在本次发布时应用上次结果
+            FEvents.Publisher.SendAll<IComplexSendEvent>();
+
         }
 
     }
